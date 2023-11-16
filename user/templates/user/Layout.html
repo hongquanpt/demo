@@ -1,0 +1,244 @@
+{%load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+   <title>Online Shop</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <link href="{% static "user/css/bootstrap.css" %}" rel="stylesheet" />
+    <link src="{% static "user/js/jquery.min.js" %}" rel="stylesheet" />
+    <!--theme-style-->
+
+    <link rel="stylesheet" href="{% static "user/css/etalage.css" %}"  />
+    <link href="{% static "user/css/style.css" %}"  rel="stylesheet"  />
+
+    <!--//theme-style-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+    <!--fonts-->
+  
+    <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js"
+            integrity="sha384-rOA1PnstxnOBLzCLMcre8ybwbTmemjzdNlILg8O7z1lUkLXozs4DHonlDtnE7fpc"
+            crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js"
+            integrity="sha384-rOA1PnstxnOBLzCLMcre8ybwbTmemjzdNlILg8O7z1lUkLXozs4DHonlDtnE7fpc"
+            crossorigin="anonymous"></script>
+    <script src ="{% static "user/js/jquery.min.js" %}"></script>
+    <script src="{% static "Scripts/jquery.validate.js" %}" ></script>
+
+
+</head>
+
+<body>
+    <!--header-->
+    <div class="header">
+        <div class="top-header">
+            <div class="container">
+                <div class="top-header-left">
+                    <ul class="support">
+                        <li><a href="#"><label> </label></a></li>
+                        <li><a href="#">Hỗ trợ<span class="live"> 24/24</span></a></li>
+                    </ul>
+                    <ul class="support">
+                        <li class="van"><a href="#"><label> </label></a></li>
+                        <li><a href="#">Miễn phí vận chuyển<span class="live"> trong vòng 5 km</span></a></li>
+                    </ul>
+                    <div class="clearfix"> </div>
+                </div>
+                <div class="clearfix"> </div>
+            </div>
+        </div>
+        <div class="bottom-header">
+            <div class="container">
+                <div class="header-bottom-left">
+                    <div class="logo">
+                        <a asp-controller="Home" asp-action="Index"><img src="{% static "user/images/logo.png" %}"  alt=" " /></a>
+                    </div>
+                  
+                        <div class="search">
+                            <input id="search-name" type="text" name="search" value="" onfocus="this.value = '';"
+                                   onblur="if (this.value == '') {this.value = '';}">
+                            <input onclick="handleSearch()" type="submit" value="TÌM KIẾM">
+                        </div>
+                        <script>
+                            function handleSearch() {
+                                const search = $("#search-name").val()
+                                $.ajax({
+                                    url: '@Url.Action("Search","Home")',
+                                    type: 'GET',
+                                    success: function (res) { 
+                                        console.log(res)
+                                            window.location = '@Url.Action("Search","Home")' + `?PageIndex=${1}` + `&PageSize=${6}`+ `&search=${search}` 
+                                        
+                                    }
+
+                                });
+                            }
+
+                        </script>
+                   
+                    <div class="clearfix"> </div>
+                </div>
+                <div class="header-bottom-right" >
+                    @if (sessionvalue == null)
+                    {
+                        <div class="account"><a asp-action="Login" asp-controller="Access"><span> </span>TÀI KHOẢN</a></div>
+                    }
+                    else
+                    {
+                        <div class="dropdown">
+                            <div class="account dropdown-toggle" data-toggle="dropdown">                      
+                                  <a style="cursor: pointer;"><span> </span>Chào, @sessionvalue </a>
+                            </div>
+                            <ul class="dropdown-menu" style="margin-top: 45px">
+                                <li><a asp-controller="Home" asp-action="profile" >
+                                    <i style="color:#F97E76;"  class="fas fa-user"></i>
+                                    Thông tin tài khoản</a>
+                                </li>
+                                <li><a asp-controller="Home" asp-action="MyOrder" asp-route-PageIndex="1" asp-route-PageSize="10" >
+                                     <i style="color:#F97E76;"  class="fas fa-receipt"></i>
+                                    Lịch sử mua hàng</a></li>
+                             </ul>
+                         </div>
+                      
+                    }
+                 
+                     <style>
+                        #dot-cart{
+                           bottom: 16px;
+                            right: 0 ;
+                            bottom:12px ;
+                            position: absolute;
+                            border-radius: 50%;
+                            z-index: 999;
+                            font-weight: 700;
+                        
+                        }
+                     </style>
+                       
+                        <div style="position: relative;" class="cart">
+                            <a asp-controller="Cart" asp-action="Index" ><span> </span>GIỎ HÀNG    
+                            </a>
+                             @if(countCart != null){
+                                   <div style="color: red;" id="dot-cart">
+                                       @countCart
+                                   </div>
+                             }else {
+                                <div style="color: red;" id="dot-cart">
+                                       
+                                </div>
+                             }
+                           
+                 
+                             
+                        </div>
+                       
+                 
+
+                    @if (sessionvalue == null)
+                        {
+                        
+                       <a asp-controller="Access" asp-action="Login">ĐĂNG NHẬP</a>
+                       <span>|</span>
+                        <a asp-controller="Access" asp-action="Register">ĐĂNG KÍ</a>
+                       
+
+                        }   
+                        else
+                    {
+                            
+                          <div>
+                            <button style="border:none; background-color:transparent; font-size:16px; margin-right:5px" onclick="handleLogout()">
+                                ĐĂNG XUẤT
+                            </button>
+                            <i  style="font-size:18px;color:#F97E76; cursor: pointer;" class="fas fa-sign-out-alt" onclick="handleLogout()"></i>
+                          </div>
+                        <div>
+                            <a style="border:none; background-color:transparent; font-size:16px; margin-right:5px" href="@Url.Action("Index", "Admin")">
+                               VỀ TRANG ADMIN
+                            </a>
+                            <i style="font-size:18px;color:#F97E76; cursor: pointer;" class="fas fa-sign-out-alt" onclick="handleLogout()"></i>
+                        </div>
+
+                        }
+                    </ul>
+
+                    <div class="clearfix"> </div>
+                </div>
+                <div class="clearfix"> </div>
+            </div>
+        </div>
+    </div>
+    <!---->
+    <div class="container">
+        {% block main-content %}{% endblock main-content %}
+        <div class="sub-cate">
+        </div>
+        <div class="clearfix"> </div>
+    </div>
+    <!---->
+    <div class="footer">
+        <div class="footer-top">
+            <div class="container">
+                <div class="latter">
+                    <h6>NEWS-LETTER</h6>
+                    <div class="sub-left-right">
+                        <form>
+                            <input type="text" value="Enter email here" onfocus="this.value = '';"
+                                   onblur="if (this.value == '') {this.value = 'Enter email here';}" />
+                            <input type="submit" value="SUBSCRIBE" />
+                        </form>
+                    </div>
+                    <div class="clearfix"> </div>
+                </div>
+                <div class="latter-right">
+                    <p>FOLLOW US</p>
+                    <ul class="face-in-to">
+                        <li><a href="#"><span> </span></a></li>
+                        <li><a href="#"><span class="facebook-in"> </span></a></li>
+                    </ul>
+
+                    <div class="clearfix"> </div>
+                </div>
+                <div class="clearfix"> </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+
+            <div class="container" style="display:flex; flex-direction: row">
+                <div style="width: 25%; ">
+                    <h3>BIG SHOPPE</h3>
+                    <ul>
+                        <li>Địa chỉ </li>
+                        <li>236 Hoàng Quốc Việt, Cổ Nhuế 1,</li>
+                        <li> Bắc Từ Liêm, Hà Nội</li>
+                        <li>Facebook <a href="https://www.facebook.com/tuan.teotop.376">Hoàng Nam</a></li>
+                        <li>Email:hntreant23@gmail.com</li>
+                        <li class="phone">SĐT: 0866020523</li>
+                  
+                    </ul>
+                </div>
+                <div style="width:80%;">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3723.649793342786!2d105.78431471488373!3d21.04669418598872!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ab2d88bb4195%3A0x3006e474cce20274!2zSOG7jWMgdmnhu4duIEvhu7kgdGh14bqtdCBRdcOibiBz4bux!5e0!3m2!1svi!2s!4v1670420855037!5m2!1svi!2s"
+                            height="450" style="border:0;width:100%" allowfullscreen="" loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+
+        
+            </div>
+        </div>
+    </div>
+</body>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{% static "Scripts/Cart.js" %}}"></script>
+<script>
+   
+   
+</script>
+
+</html>
